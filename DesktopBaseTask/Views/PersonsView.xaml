@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:DesktopBaseTask.Views" 
       xmlns:viewModel="clr-namespace:DesktopBaseTask.ViewModels"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PersonsView">
@@ -12,7 +13,46 @@
     <Page.DataContext>
         <viewModel:PersonsViewModel/>
     </Page.DataContext>
-    
+
+    <Page.Resources>
+        <Storyboard x:Key="OpenFilter">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="GridFilter">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="200"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="ButtonOpenFilter">
+                <SplineThicknessKeyFrame KeyTime="0" Value="0, 0, 0, 10" />
+                <SplineThicknessKeyFrame KeyTime="0:0:0.2" Value="0, 0, 0, 210" />
+            </ThicknessAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="ButtonCloseFilter">
+                <SplineThicknessKeyFrame KeyTime="0" Value="0, 0, 0, 10" />
+                <SplineThicknessKeyFrame KeyTime="0:0:0.2" Value="0, 0, 0, 210" />
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseFilter">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="GridFilter">
+                <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="ButtonOpenFilter">
+                <SplineThicknessKeyFrame KeyTime="0" Value="0, 0, 0, 210"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.2" Value="0, 0, 0, 10" />
+            </ThicknessAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="ButtonCloseFilter">
+                <SplineThicknessKeyFrame KeyTime="0" Value="0, 0, 0, 210"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.2" Value="0, 0, 0, 10"/>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+    </Page.Resources>
+    <Page.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonOpenFilter">
+            <BeginStoryboard Storyboard="{StaticResource OpenFilter}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonCloseFilter">
+            <BeginStoryboard Storyboard="{StaticResource CloseFilter}"/>
+        </EventTrigger>
+    </Page.Triggers>
+
     <Grid>
         <DataGrid ItemsSource="{Binding Persons}" AutoGenerateColumns="False">
             <DataGrid.Columns>
@@ -21,5 +61,29 @@
                 <DataGridTextColumn Header="Возраст" Binding="{Binding Age}"/>
             </DataGrid.Columns>
         </DataGrid>
+
+        <Button x:Name="ButtonOpenFilter" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" BorderBrush="{x:Null}" Background="#443BED" Height="30" Width="30"
+                Margin="0, 0, 0, 10" VerticalAlignment="Bottom" Click="ButtonOpenFilter_Click">
+            <materialDesign:PackIcon Kind="ArrowTop" Width="20" Height="20"/>
+        </Button>
+        <Button x:Name="ButtonCloseFilter" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" BorderBrush="{x:Null}" Background="#443BED" Height="30" Width="30"
+                Margin="0, 0, 0, 10" VerticalAlignment="Bottom" Visibility="Collapsed" Click="ButtonCloseFilter_Click">
+            <materialDesign:PackIcon Kind="ArrowBottom" Width="20" Height="20"/>
+        </Button>
+
+        <Grid x:Name="GridFilter" VerticalAlignment="Bottom" Background="#3B8FED" Height="0">
+            <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Имя" Margin="5" VerticalAlignment="Center"/>
+                    <TextBox Margin="20" Width="100" VerticalAlignment="Center" Text="{Binding FilterName}"/>
+                </StackPanel>
+                <Button Grid.Row="1" Content="Рассчитать средний возраст" Command="{Binding FilterNameCommand}"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Page>

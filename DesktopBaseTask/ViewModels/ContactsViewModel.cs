@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +24,17 @@ namespace DesktopBaseTask.ViewModels
             set
             {
                 _contacts = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _duration; // Длительность контакта
+        public int Duration
+        {
+            get => _duration;
+            set
+            {
+                _duration = value;
                 OnPropertyChanged();
             }
         }
@@ -91,7 +103,7 @@ namespace DesktopBaseTask.ViewModels
                 ObservableCollection<Contact> filterContacts = new ObservableCollection<Contact>();
                 foreach (var item in Contacts)
                 {
-                    if (item.From > StartDate && item.To < EndDate && item.To.Subtract(item.From).TotalMinutes >= 5)
+                    if (item.From >= StartDate && item.To <= EndDate && item.To.Subtract(item.From).TotalMinutes >= Duration)
                     {
                         filterContacts.Add(item);
                     }

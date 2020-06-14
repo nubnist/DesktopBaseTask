@@ -24,5 +24,17 @@ namespace DesktopBaseTask.Views
         {
             InitializeComponent();
         }
+
+        private void ButtonCloseFilter_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonCloseFilter.Visibility = Visibility.Collapsed;
+            ButtonOpenFilter.Visibility = Visibility.Visible;
+        }
+
+        private void ButtonOpenFilter_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonOpenFilter.Visibility = Visibility.Collapsed;
+            ButtonCloseFilter.Visibility = Visibility.Visible;
+        }
     }
 }

@@ -21,8 +21,8 @@ namespace DesktopBaseTask.Models
             }
         }
         public string Name { get; set; }
-        private uint _age;
-        public uint Age
+        private int _age;
+        public int Age
         {
             get => _age;
             set
